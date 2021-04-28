@@ -1,0 +1,57 @@
+/*
+ * Copyright (C) 2015 GuangZhou Tronlong co., LTD - http://www.tronlong.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/* device tree overlay for TL570x-EVM board imx219 csi-2 camera */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@1 {
+		target = <&cal>;
+		__overlay__ {
+			status = "okay";
+			pixel-rate = <182400000>;
+			lane-polarity = <1 1 1>;
+		};
+	};
+
+	fragment2 {
+		target = <&csi2_0>;
+		__overlay__ {
+			status = "okay";
+			csi2_phy0: endpoint@0 {
+				slave-mode;
+				remote-endpoint = <&csi2_cam0>;
+			};
+		};
+	};
+
+	fragment@3 {
+		target = <&i2c4>;
+		__overlay__ {
+			status = "okay";
+			imx219: camera@0x10 {
+				compatible = "sony,imx219";
+				reg = <0x10>;
+
+				clock-frequency = <24000000>;
+				clocks = <&mclk 0>;
+				clock-names = "mclk";
+
+				port {
+					csi2_cam0: endpoint@0 {
+						clock-lanes = <2>;
+						data-lanes = <0 1>;
+						remote-endpoint = <&csi2_phy0>;
+					};
+				};
+			};
+		};
+	};
+};

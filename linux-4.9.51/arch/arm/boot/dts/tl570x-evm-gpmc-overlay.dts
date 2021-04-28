@@ -1,0 +1,133 @@
+/*
+ * Copyright (C) 2015 GuangZhou Tronlong co., LTD - http://www.tronlong.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/* device tree overlay for GPMC CS0 with nonmultiplexed mode */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/pinctrl/dra.h>
+
+/ {
+	fragment@1 {
+		target = <&dra7_pmx_core>;
+		__overlay__ {
+			gpmc_pins_default: gpmc_pins_default {
+				pinctrl-single,pins = <
+					DRA7XX_CORE_IOPAD(0x34D8, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_wait0.gpmc_wait0 */
+					DRA7XX_CORE_IOPAD(0x3440, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a0.gpmc_a0 */
+					DRA7XX_CORE_IOPAD(0x3444, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a1.gpmc_a1 */
+					DRA7XX_CORE_IOPAD(0x3448, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a2.gpmc_a2 */
+					DRA7XX_CORE_IOPAD(0x344c, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a3.gpmc_a3 */
+					DRA7XX_CORE_IOPAD(0x3450, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a4.gpmc_a4 */
+					DRA7XX_CORE_IOPAD(0x3454, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a5.gpmc_a5 */
+					DRA7XX_CORE_IOPAD(0x3458, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a6.gpmc_a6 */
+					DRA7XX_CORE_IOPAD(0x345c, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a7.gpmc_a7 */
+					DRA7XX_CORE_IOPAD(0x3460, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a8.gpmc_a8 */
+					DRA7XX_CORE_IOPAD(0x3464, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a9.gpmc_a9 */
+					DRA7XX_CORE_IOPAD(0x3468, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a10.gpmc_a10 */
+					DRA7XX_CORE_IOPAD(0x346c, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a11.gpmc_a11 */
+					DRA7XX_CORE_IOPAD(0x3470, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a12.gpmc_a12 */
+					DRA7XX_CORE_IOPAD(0x3474, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a13.gpmc_a13 */
+					DRA7XX_CORE_IOPAD(0x3478, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a14.gpmc_a14 */
+					DRA7XX_CORE_IOPAD(0x347c, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a15.gpmc_a15 */
+					DRA7XX_CORE_IOPAD(0x3480, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a16.gpmc_a16 */
+					DRA7XX_CORE_IOPAD(0x3484, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a17.gpmc_a17 */
+					DRA7XX_CORE_IOPAD(0x3488, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_a18.gpmc_a18 */
+					DRA7XX_CORE_IOPAD(0x34d4, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_ben1.gpmc_ben1 */
+					DRA7XX_CORE_IOPAD(0x34d0, (PIN_INPUT_PULLUP | MUX_MODE0)) /* gpmc_ben0.gpmc_ben0 */
+					DRA7XX_CORE_IOPAD(0x3400, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad0.gpmc_d0 */
+					DRA7XX_CORE_IOPAD(0x3404, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad1.gpmc_d1 */
+					DRA7XX_CORE_IOPAD(0x3408, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad2.gpmc_d2 */
+					DRA7XX_CORE_IOPAD(0x340C, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad3.gpmc_d3 */
+					DRA7XX_CORE_IOPAD(0x3410, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad4.gpmc_d4 */
+					DRA7XX_CORE_IOPAD(0x3414, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad5.gpmc_d5 */
+					DRA7XX_CORE_IOPAD(0x3418, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad6.gpmc_d6 */
+					DRA7XX_CORE_IOPAD(0x341C, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad7.gpmc_d7 */
+					DRA7XX_CORE_IOPAD(0x3420, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad8.gpmc_d8 */
+					DRA7XX_CORE_IOPAD(0x3424, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad9.gpmc_d9 */
+					DRA7XX_CORE_IOPAD(0x3428, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad10.gpmc_d10 */
+					DRA7XX_CORE_IOPAD(0x342C, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad11.gpmc_d11 */
+					DRA7XX_CORE_IOPAD(0x3430, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad12.gpmc_d12 */
+					DRA7XX_CORE_IOPAD(0x3434, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad13.gpmc_d13 */
+					DRA7XX_CORE_IOPAD(0x3438, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad14.gpmc_d14 */
+					DRA7XX_CORE_IOPAD(0x343C, (PIN_INPUT_PULLUP | MUX_MODE0))  /* gpmc_ad15.gpmc_d15 */
+					DRA7XX_CORE_IOPAD(0x34C0, (PIN_INPUT | MUX_MODE0))         /* gpmc_clk.gpmc_clk */
+					DRA7XX_CORE_IOPAD(0x34C4, (PIN_OUTPUT_PULLUP | MUX_MODE0)) /* gpmc_advn_ale.gpmc_advn_ale */
+					DRA7XX_CORE_IOPAD(0x34C8, (PIN_OUTPUT_PULLUP | MUX_MODE0)) /* gpmc_oen_ren.gpmc_oen_ren */
+					DRA7XX_CORE_IOPAD(0x34CC, (PIN_OUTPUT_PULLUP | MUX_MODE0)) /* gpmc_wen.gpmc_wen */
+					DRA7XX_CORE_IOPAD(0x34B4, (PIN_OUTPUT_PULLUP | MUX_MODE0)) /* gpmc_cs0.gpmc_cs0 */
+				>;
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&gpmc>;
+		__overlay__ {
+			depth = <1>;    /* only create devices on depth 1 */
+			status = "okay";
+
+			#address-cells = <2>;
+			#size-cells = <1>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&gpmc_pins_default>;
+
+			ranges = <0 0 0x01000000 0x01000000>;  /* CSn0 0, addr 0x01000000, size 0x1000000 (16MiB) */
+
+			gpmc_device0@0,0 {
+				compatible = "cfi-flash";
+				linux,mtd-name= "intel,pf48f6000m0y1be";
+
+				#address-cells = <1>;
+				#size-cells = <1>;
+
+				status = "okay";
+
+				reg = <0 0 0x01000000>;
+
+				/* CONFIG 1 */
+				gpmc,sync-read;         /* GPMC_CONFIG1_READTYPE_ASYNC */
+				gpmc,sync-write;        /* GPMC_CONFIG1_WRITETYPE_ASYNC */
+				gpmc,mux-add-data;        /* GPMC_CONFIG1_MUXTYPE(0) */
+				bank-width = <2>;               /* GPMC_CONFIG1_DEVICESIZE(1) 2: 16bits */
+
+				/* CONFIG 2 */
+				gpmc,sync-clk-ps = <7000>;      /* use to calculate GPMCFCLKDIVIDER, GPMC_CLK = GPMC_FCLK / 2 */
+				gpmc,cs-on-ns = <0>;
+				gpmc,cs-rd-off-ns = <37>;
+				gpmc,cs-wr-off-ns = <37>;
+
+				/* CONFIG 3 */
+				gpmc,adv-on-ns = <3>;
+				gpmc,adv-rd-off-ns = <11>;
+				gpmc,adv-wr-off-ns = <11>;
+
+				/* CONFIG 4 */
+				gpmc,oe-on-ns = <15>;
+				gpmc,oe-off-ns = <37>;
+				gpmc,we-on-ns = <15>;
+				gpmc,we-off-ns = <33>;
+
+				/* CONFIG 5 */
+				gpmc,rd-cycle-ns = <48>;
+				gpmc,wr-cycle-ns = <48>;
+				gpmc,access-ns = <48>;
+				gpmc,page-burst-access-ns = <0>;
+
+				/* CONFIG 6 */
+				gpmc,bus-turnaround-ns = <0>;
+				gpmc,cycle2cycle-delay-ns = <0>;
+				gpmc,wr-data-mux-bus-ns = <15>;
+				gpmc,wr-access-ns = <26>;
+				gpmc,cycle2cycle-samecsen;
+				gpmc,cycle2cycle-diffcsen;
+			};
+		};
+	};
+};

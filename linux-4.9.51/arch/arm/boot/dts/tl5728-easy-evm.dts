@@ -1,0 +1,250 @@
+/*
+ * Copyright (C) 2016 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "am57xx-evm-common.dtsi"
+
+/ {
+	model = "TL5728-EasyEVM";
+
+	aliases {
+		rtc0 = &mcp_rtc;
+	};
+
+	backlight {
+		compatible = "pwm-backlight";
+		pinctrl-names = "default";
+		pinctrl-0 = <&ehrpwm0_pins>;
+
+		pwms = <&ecap0 0 50000 0>;
+
+		brightness-levels = <0 10 50 100 150 200 220 240 255>;
+		default-brightness-level = <8>;
+	};
+};
+
+&mmc1 {
+	pinctrl-names = "default", "hs", "sdr12", "sdr25", "sdr50", "ddr50", "sdr104";
+	pinctrl-0 = <&mmc1_pins_default>;
+	vmmc-supply = <&vdd_3v3>;
+	vmmc_aux-supply = <&ldo1_reg>;
+};
+
+&mmc2 {
+	pinctrl-names = "default", "hs", "ddr_1_8v";
+	pinctrl-0 = <&mmc2_pins_default>;
+	pinctrl-1 = <&mmc2_pins_hs>;
+	pinctrl-2 = <&mmc2_pins_ddr_rev20>;
+	/delete-property/ mmc-hs200-1_8v;
+};
+
+&mmc3 {
+	pinctrl-names = "default", "hs", "sdr12", "sdr25", "sdr50";
+	pinctrl-0 = <&mmc3_pins_default>;
+	pinctrl-1 = <&mmc3_pins_hs>;
+	pinctrl-2 = <&mmc3_pins_sdr12>;
+	pinctrl-3 = <&mmc3_pins_sdr25>;
+	pinctrl-4 = <&mmc3_pins_sdr50 &mmc3_iodelay_manual1_rev20_conf>;
+};
+
+&lcd0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&lcd_pins_default>;
+
+	enable-gpios = <&gpio2 5 GPIO_ACTIVE_HIGH>;
+
+	panel-timing {
+		clock-frequency = <9000000>;
+		hactive = <480>;
+		vactive = <272>;
+		hfront-porch = <2>;
+		hback-porch = <2>;
+		hsync-len = <41>;
+		vback-porch = <2>;
+		vfront-porch = <2>;
+		vsync-len = <10>;
+		hsync-active = <0>;
+		vsync-active = <0>;
+		de-active = <1>;
+		pixelclk-active = <1>;
+	};
+};
+
+#include "am57xx-evm-cmem.dtsi"
+
+&dra7_pmx_core {
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c4_pins_default &i2c1_pins_default>;
+	uart10_pins_default: uart10_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x3570, (PIN_INPUT_PULLUP | MUX_MODE8)) /* vin2a_d2.uart10_rxd */
+			DRA7XX_CORE_IOPAD(0x3574, (PIN_INPUT_PULLUP | MUX_MODE8)) /* vin2a_d3.uart10_txd */
+		>;
+	};
+
+	spi3_pins: spi3_pins {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x36d4, (INPUT_EN | MUX_MODE3))          /* mcasp1_axr8.spi3_sclk (B12) */
+			DRA7XX_CORE_IOPAD(0x36d8, (INPUT_EN | MUX_MODE3))          /* mcasp1_axr9.spi3_d1 (A11) */
+			DRA7XX_CORE_IOPAD(0x36dc, (INPUT_EN | MUX_MODE3))          /* mcasp1_axr10.spi3_d0 (B13) */
+			DRA7XX_CORE_IOPAD(0x36e0, (PIN_OUTPUT_PULLUP | MUX_MODE3)) /* mcasp1_axr11.spi3_cs0 (A12) */
+		>;
+	};
+
+	lcd_pins_default: lcd_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x35c8, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_clk */
+			DRA7XX_CORE_IOPAD(0x35cc, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_de */
+			DRA7XX_CORE_IOPAD(0x35d4, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_hsync */
+			DRA7XX_CORE_IOPAD(0x35d8, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_vsync */
+			DRA7XX_CORE_IOPAD(0x35dc, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d0 */
+			DRA7XX_CORE_IOPAD(0x35e0, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d1 */
+			DRA7XX_CORE_IOPAD(0x35e4, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d2 */
+			DRA7XX_CORE_IOPAD(0x35e8, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d3 */
+			DRA7XX_CORE_IOPAD(0x35ec, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d4 */
+			DRA7XX_CORE_IOPAD(0x35f0, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d5 */
+			DRA7XX_CORE_IOPAD(0x35f4, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d6 */
+			DRA7XX_CORE_IOPAD(0x35f8, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d7 */
+			DRA7XX_CORE_IOPAD(0x35fc, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d8 */
+			DRA7XX_CORE_IOPAD(0x3600, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d9 */
+			DRA7XX_CORE_IOPAD(0x3604, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d10 */
+			DRA7XX_CORE_IOPAD(0x3608, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d11 */
+			DRA7XX_CORE_IOPAD(0x360c, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d12 */
+			DRA7XX_CORE_IOPAD(0x3610, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d13 */
+			DRA7XX_CORE_IOPAD(0x3614, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d14 */
+			DRA7XX_CORE_IOPAD(0x3618, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d15 */
+			DRA7XX_CORE_IOPAD(0x361c, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d16 */
+			DRA7XX_CORE_IOPAD(0x3620, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d17 */
+			DRA7XX_CORE_IOPAD(0x3624, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d18 */
+			DRA7XX_CORE_IOPAD(0x3628, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d19 */
+			DRA7XX_CORE_IOPAD(0x362c, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d20 */
+			DRA7XX_CORE_IOPAD(0x3630, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d21 */
+			DRA7XX_CORE_IOPAD(0x3634, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d22 */
+			DRA7XX_CORE_IOPAD(0x3638, (PIN_OUTPUT | MUX_MODE0 | SLEWCONTROL | MODE_SELECT)) /* vout1_d23 */
+		>;
+	};
+
+	ads7846_pins: ads7846_pins {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x3548, (PIN_INPUT_PULLUP | MUX_MODE14)) /* vin1a_d21.gpio3_25 */
+		>;
+	};
+
+	i2c4_pins_default: i2c4_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x3440, (PIN_INPUT_PULLUP | MUX_MODE7)) /* gpmc_a0.i2c4_scl */
+			DRA7XX_CORE_IOPAD(0x3444, (PIN_INPUT_PULLUP | MUX_MODE7)) /* gpmc_a1.i2c4_sda */
+		>;
+	};
+
+    usb2_pins_default: usb2_pins_default {
+        pinctrl-single,pins = <
+            DRA7XX_CORE_IOPAD(0x3684, (PIN_OUTPUT_PULLUP | MUX_MODE0)) /* usb2_drvvbus.usb2_drvvbus */
+        >;
+    };
+};
+
+&uart10 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart10_pins_default>;
+};
+
+&mcspi2 {
+	status = "okay";
+};
+
+&mcspi3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi3_pins>;
+	ti,pindir-d0-out-d1-in;
+
+	ads7846@0 {
+		pinctrl-names = "default";
+		pinctrl-0 = <&ads7846_pins>;
+
+		compatible = "ti,ads7846";
+
+		reg = <0>;                      /* CS0 */
+		spi-max-frequency = <1500000>;
+
+		interrupt-parent = <&gpio3>;
+		interrupts = <25 0>;            /* gpio3_25 */
+		pendown-gpio = <&gpio3 25 0>;
+
+		ti,x-min = /bits/ 16 <0x0>;
+		ti,x-max = /bits/ 16 <0x0fff>;
+		ti,y-min = /bits/ 16 <0x0>;
+		ti,y-max = /bits/ 16 <0x0fff>;
+
+		ti,x-plate-ohms = /bits/ 16 <180>;
+		ti,pressure-max = /bits/ 16 <255>;
+
+		ti,debounce-max = /bits/ 16 <10>;
+		ti,debounce-tol = /bits/ 16 <30>;
+		ti,debounce-rep = /bits/ 16 <1>;
+
+		ti,settle-delay-usec = /bits/ 16 <150>;
+		ti,keep-vref-on = <1>;
+
+		linux,wakeup;
+	};
+};
+
+&i2c4 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	mcp_rtc: rtc@6f {
+		compatible = "microchip,mcp7941x";
+		reg = <0x6f>;
+		interrupts-extended = <&crossbar_mpu GIC_SPI 2 IRQ_TYPE_EDGE_RISING>,
+				<&dra7_pmx_core 0x424>;
+		interrupt-names = "irq", "wakeup";
+		vcc-supply = <&vdd_3v3>;
+		wakeup-source;
+	};
+};
+
+&davinci_mdio {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&rgmii0_pins_default &rgmii1_pins_default>;
+};
+
+&mac {
+	status = "okay";
+	dual_emac;
+};
+
+&usb2 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&usb2_pins_default>;
+};
+
+&i2c5 {
+    status = "okay";
+    clock-frequency = <400000>;
+
+    pinctrl-names = "default";
+    pinctrl-0 = <&i2c5_pins_default>;
+};
+
+&gpio3 {
+	ti,no-reset-on-init;
+};
+
+&dss {
+	ti,no-reset-on-init;
+	ti,no-idle;
+};
+
+&dispc {
+	ti,no-reset-on-init;
+	ti,no-idle;
+};

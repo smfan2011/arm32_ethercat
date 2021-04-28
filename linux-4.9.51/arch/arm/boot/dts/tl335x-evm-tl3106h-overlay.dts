@@ -1,0 +1,136 @@
+/*
+ * Copyright (C) 2015 GuangZhou Tronlong co., LTD - http://www.tronlong.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/* device tree overlay for TL335x-EVM board with TL3106 module */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/am33xx.h>
+
+/ {
+	fragment@0 {
+		target = <&am33xx_pinmux>;
+		__overlay__ {
+			pinctrl-0 = <&mcasp0_switch>;
+
+			/*
+			* switcher for mcasp0 signal
+			* when this pin set to 0, mcasp0 signal switch to hdmi channel
+			* when this pin set to 1, mcasp0 signal switch to tl3106 module
+			*/
+			mcasp0_switch: mcasp0_switch {
+				pinctrl-single,pins = <
+					AM33XX_IOPAD(0x874, PIN_OUTPUT_PULLUP | MUX_MODE7)	/* (U17) GPMC_WPN/GPIO0[31] */
+				>;
+			};
+
+			mcasp0_pins: mcasp0_pins {
+				pinctrl-single,pins = <
+					AM33XX_IOPAD(0x9ac, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* (A14) MCASP0_AHCLKX.MCASP0_AHCLKX */
+
+					AM33XX_IOPAD(0x990, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* (A13) MCASP0_ACLKX.MCASP0_ACLKX */
+					AM33XX_IOPAD(0x994, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* (B13) MCASP0_FSX.MCASP0_FSX */
+					AM33XX_IOPAD(0x9a0, PIN_OUTPUT_PULLDOWN | MUX_MODE2)	/* (B12) MCASP0_ACLKR.MCASP0_AXR2 */
+					AM33XX_IOPAD(0x9a4, PIN_INPUT_PULLDOWN | MUX_MODE2)	/* (C13) MCASP0_FSR.MCASP0_AXR3 */
+				>;
+			};
+
+			mcasp0_pins_sleep: mcasp0_pins_sleep {
+				pinctrl-single,pins = <
+					AM33XX_IOPAD(0x9ac, PIN_INPUT_PULLDOWN | MUX_MODE7)
+					AM33XX_IOPAD(0x990, PIN_INPUT_PULLDOWN | MUX_MODE7)
+					AM33XX_IOPAD(0x994, PIN_INPUT_PULLDOWN | MUX_MODE7)
+					AM33XX_IOPAD(0x9a0, PIN_INPUT_PULLDOWN | MUX_MODE7)
+					AM33XX_IOPAD(0x9a4, PIN_INPUT_PULLDOWN | MUX_MODE7)
+				>;
+			};
+		};
+	};
+
+	fragment@1 {
+		target-path = "/";
+		__overlay__ {
+			sound@0 {
+				compatible = "simple-audio-card";
+				simple-audio-card,name = "TL3106";
+				simple-audio-card,widgets =
+					"Microphone", "Microphone Jack",
+					"Line", "Line In Jack",
+					"Line", "Line Out Jack";
+
+				simple-audio-card,routing =
+					"LINE1L", "Line In Jack",
+					"LINE1R", "Line In Jack",
+					"MIC3L", "Microphone Jack",
+					"MIC3R", "Microphone Jack",
+					"Microphone Jack", "Mic Bias",
+					"Line Out Jack", "LLOUT",
+					"Line Out Jack", "RLOUT";
+
+				simple-audio-card,format = "dsp_b";
+				simple-audio-card,bitclock-master = <&sound_master>;
+				simple-audio-card,frame-master = <&sound_master>;
+				simple-audio-card,bitclock-inversion;
+
+				sound_master: simple-audio-card,cpu {
+					sound-dai = <&mcasp0>;
+					system-clock-frequency = <24000000>;
+					system-clock-direction = "out";
+				};
+
+				simple-audio-card,codec {
+					sound-dai = <&tlv320aic3106>;
+					system-clock-frequency = <24000000>;
+				};
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&mcasp0>;
+		__overlay__ {
+			#sound-dai-cells = <0>;
+			pinctrl-names = "default", "sleep";
+			pinctrl-0 = <&mcasp0_pins>;
+			pinctrl-1 = <&mcasp0_pins_sleep>;
+			status = "okay";
+			op-mode = <0>;	/* MCASP_IIS_MODE */
+			tdm-slots = <2>;
+			/* 4 serializers */
+			serial-dir = <	/* 0: INACTIVE, 1: TX, 2: RX */
+					0 0 1 2
+			>;
+			tx-num-evt = <32>;
+			rx-num-evt = <32>;
+		};
+	};
+
+	fragment@3 {
+		target = <&i2c0>;
+		__overlay__ {
+			status = "okay";
+			tlv320aic3106: tlv320aic3106@18 {
+				#sound-dai-cells = <0>;
+				compatible = "ti,tlv320aic3106";
+				reg = <0x18>;
+				status = "okay";
+				ai3x-micbias-vg = <1>; /* MICBIAS output is powered to 2.0V */
+
+				/* Regulators */
+				AVDD-supply = <&vaux2_reg>;
+				IOVDD-supply = <&vaux2_reg>;
+				DRVDD-supply = <&vaux2_reg>;
+				DVDD-supply = <&vbat>;
+			};
+		};
+	};
+};

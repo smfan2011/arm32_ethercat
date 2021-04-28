@@ -1,0 +1,98 @@
+/*
+ * Copyright (C) 2015 GuangZhou Tronlong co., LTD - http://www.tronlong.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/pinctrl/dra.h>
+
+/ {
+	fragment@1 {
+		target = <&dra7_pmx_core>;
+		__overlay__ {
+			vin4a_pins: vin4a_pins {
+				pinctrl-single,pins = <
+					DRA7XX_CORE_IOPAD(0x34e0, (PIN_OUTPUT_PULLUP | MUX_MODE14)) /* vin1b_clk1.gpio2_31 (AH7) */
+					DRA7XX_CORE_IOPAD(0x36ac, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp1_aclkr.vin4a_d0 */
+					DRA7XX_CORE_IOPAD(0x36b0, (PIN_INPUT_PULLUP | MUX_MODE8 | MODE_SELECT))       /* mcasp1_fsr.vin4a_d1 */
+					DRA7XX_CORE_IOPAD(0x36bc, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp1_axr3.vin4a_d2 */
+					DRA7XX_CORE_IOPAD(0x36c0, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp1_axr3.vin4a_d3 */
+					DRA7XX_CORE_IOPAD(0x36c4, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp1_axr4.vin4a_d4 */
+					DRA7XX_CORE_IOPAD(0x36c8, (PIN_INPUT_PULLUP | MUX_MODE8 | MODE_SELECT))       /* mcasp1_axr5.vin4a_d5 */
+					DRA7XX_CORE_IOPAD(0x36cc, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp1_axr6.vin4a_d6 */
+					DRA7XX_CORE_IOPAD(0x36d0, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp1_axr6.vin4a_d7 */
+					DRA7XX_CORE_IOPAD(0x36fc, (PIN_INPUT_PULLUP | MUX_MODE8 | MODE_SELECT))       /* mcasp2_aclkr.vin4a_d8 */
+					DRA7XX_CORE_IOPAD(0x3700, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp2_fsr.vin4a_d9 */
+					DRA7XX_CORE_IOPAD(0x3704, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp2_axr0.vin4a_d10 */
+					DRA7XX_CORE_IOPAD(0x3708, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp2_axr1.vin4a_d11 */
+					DRA7XX_CORE_IOPAD(0x3714, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp2_axr4.vin4a_d12 */
+					DRA7XX_CORE_IOPAD(0x3718, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp2_axr5.vin4a_d13 */
+					DRA7XX_CORE_IOPAD(0x371c, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp2_axr6.vin4a_d14 */
+					DRA7XX_CORE_IOPAD(0x3720, (PIN_INPUT_PULLUP | MUX_MODE8 | MODE_SELECT))       /* mcasp2_axr7.vin4a_d15 */
+					DRA7XX_CORE_IOPAD(0x3734, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp4_aclkx.vin4a_d16 */
+					DRA7XX_CORE_IOPAD(0x3738, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp4_fsx.vin4a_d17 */
+					DRA7XX_CORE_IOPAD(0x373c, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp4_axr0.vin4a_d18 */
+					DRA7XX_CORE_IOPAD(0x3740, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp4_axr1.vin4a_d19 */
+					DRA7XX_CORE_IOPAD(0x3744, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp5_aclkx.vin4a_d20*/
+					DRA7XX_CORE_IOPAD(0x3748, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp5_fsx.vin4a_d21  */
+					DRA7XX_CORE_IOPAD(0x374c, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp5_axr0.vin4a_d22 */
+					DRA7XX_CORE_IOPAD(0x3750, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* mcasp5_axr1.vin4a_d23 */
+					DRA7XX_CORE_IOPAD(0x3688, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* gpio_6_14.vin4a_hsync0 */
+					DRA7XX_CORE_IOPAD(0x368c, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* gpio_6_15.vin4a_vsync0 */
+					DRA7XX_CORE_IOPAD(0x3690, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* gpio_6_16.vin4a_fld0 */
+					DRA7XX_CORE_IOPAD(0x369c, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* xref_clk2.vin4a_clk0 */
+					DRA7XX_CORE_IOPAD(0x36a0, (PIN_INPUT_PULLDOWN | MUX_MODE8 | MODE_SELECT))     /* xref_clk3.vin4a_de0 */
+				>;
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&vin4a>;
+		__overlay__ {
+			status = "okay";
+
+			endpoint@0 {
+				slave-mode;
+				remote-endpoint = <&adv7611_0>;
+			};
+		};
+	};
+
+	fragment@3 {
+		target = <&vip2>;
+		__overlay__ {
+			status = "okay";
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&vin4a_pins>;
+		};
+	};
+
+	fragment@4 {
+		target = <&i2c4>;
+		__overlay__ {
+			status = "okay";
+
+			adv7611@4c {
+				compatible = "adi,adv7611";
+
+				reg = <0x4c>;
+
+				port {
+					adv7611_0: endpoint {
+						remote-endpoint = <&vin4a>;
+						pixel-mux;
+						bus-width = <16>;
+						channels = <0>;
+					};
+				};
+			};
+		};
+	};
+};

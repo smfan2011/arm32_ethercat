@@ -1,0 +1,33 @@
+/*
+ * Copyright (C) 2015 GuangZhou Tronlong co., LTD - http://www.tronlong.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/* Common device tree for TL335x-EVM board */
+
+#include "tl335x-evm-common.dts"
+
+&am33xx_pinmux {
+	emmc_pins_default: emmc_pins_default {
+		pinctrl-single,pins = <
+			AM33XX_IOPAD(0x880, (PIN_INPUT_PULLUP | MUX_MODE2))	/* (U9) gpmc_csn1.mmc1_clk */
+			AM33XX_IOPAD(0x884, (PIN_INPUT_PULLUP | MUX_MODE2))	/* (V9) gpmc_csn2.mmc1_cmd */
+			AM33XX_IOPAD(0x800, (PIN_INPUT_PULLUP | MUX_MODE1))	/* (U7) gpmc_ad0.mmc1_dat0 */
+			AM33XX_IOPAD(0x804, (PIN_INPUT_PULLUP | MUX_MODE1))	/* (V7) gpmc_ad1.mmc1_dat1 */
+			AM33XX_IOPAD(0x808, (PIN_INPUT_PULLUP | MUX_MODE1))	/* (R8) gpmc_ad2.mmc1_dat2 */
+			AM33XX_IOPAD(0x80c, (PIN_INPUT_PULLUP | MUX_MODE1))	/* (T8) gpmc_ad3.mmc1_dat3 */
+		>;
+	};
+};
+
+&mmc2 {
+	status = "okay";
+	vmmc-supply = <&vmmc_reg>;
+	bus-width = <4>;
+	ti,non-removable;
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_pins_default>;
+};

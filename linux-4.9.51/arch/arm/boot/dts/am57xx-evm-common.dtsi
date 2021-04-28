@@ -1,0 +1,251 @@
+/*
+ * Copyright (C) 2015-2016 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "am57xx-beagle-x15-common.dtsi"
+#include "am57xx-evm-cmem.dtsi"
+#include "am57xx-industrial-grade.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+/ {
+	model = "TI AM5728 BeagleBoard-X15 rev B1";
+	compatible = "ti,am5728-evm", "ti,am572x-beagle-x15", "ti,am5728", "ti,dra742", "ti,dra74", "ti,dra7";
+
+	gpio_keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "default";
+		pinctrl-0 = <&buttons_pins_default>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		autorepeat;
+
+		USER1 {
+			label = "user-key0";
+			linux,code = <KEY_PROG1>;
+			gpios = <&gpio3 22 GPIO_ACTIVE_LOW>;
+			debounce-interval = <0>;
+		};
+
+		USER2 {
+			label = "user-key1";
+			linux,code = <KEY_PROG2>;
+			gpios = <&gpio3 23 GPIO_ACTIVE_LOW>;
+			debounce-interval = <0>;
+		};
+	};
+
+	aliases {
+		display0 = &lcd0;
+		display1 = &hdmi0;
+	};
+
+	lcd0: display {
+		compatible = "osddisplays,osd070t1718-19ts", "panel-dpi";
+
+		label = "lcd";
+
+		port {
+			lcd_in: endpoint {
+				remote-endpoint = <&dpi_out>;
+			};
+		};
+	};
+
+	vmmcwl_fixed: fixedregulator-mmcwl {
+		compatible = "regulator-fixed";
+		regulator-name = "vmmcwl_fixed";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&gpio5 8 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+};
+
+&dra7_pmx_core {
+	buttons_pins_default: buttons_pins_default {
+		pinctrl-single,pins = <
+			0x13c (PIN_INPUT_PULLUP | MUX_MODE14) /* vin1a_d18.gpio3_22 (AE5) */
+			0x140 (PIN_INPUT_PULLUP | MUX_MODE14) /* vin1a_d19.gpio3_23 (AE1) */
+		>;
+	};
+
+	ehrpwm0_pins: ehrpwm0_pins {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x3500, (PIN_OUTPUT | MUX_MODE10)) /* vin1a_d3.eCAP1_in_PWM1_out (AH6) */
+		>;
+	};
+
+	qspi1_pins_default: qspi1_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x3488, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_a18.qspi1_sclk */
+			DRA7XX_CORE_IOPAD(0x3474, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_a13.qspi1_rtclk */
+			DRA7XX_CORE_IOPAD(0x3480, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_a16.qspi1_d0 */
+			DRA7XX_CORE_IOPAD(0x3484, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_a17.qspi1_d1 */
+			DRA7XX_CORE_IOPAD(0x347c, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_a15.qspi1_d2 */
+			DRA7XX_CORE_IOPAD(0x3478, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_a14.qspi1_d3 */
+			DRA7XX_CORE_IOPAD(0x34b8, (PIN_INPUT_PULLUP | MUX_MODE1)) /* gpmc_cs2.qspi1_cs0 */
+		>;
+	};
+
+	uart1_pins_default: uart1_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x37e0, (PIN_INPUT_PULLUP | MUX_MODE0)) /* uart1_rxd.uart1_rxd */
+			DRA7XX_CORE_IOPAD(0x37e4, (PIN_INPUT_PULLUP | MUX_MODE0)) /* uart1_txd.uart1_txd */
+		>;
+	};
+
+	dcan1__pins_default: dcan1_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x37d0, (PIN_INPUT_PULLUP | MUX_MODE0))   /* dcan1_tx.tx */
+			DRA7XX_CORE_IOPAD(0x37d4, (PIN_INPUT_PULLUP | MUX_MODE0))   /* dcan1_rx.rx */
+		>;
+	};
+
+	i2c5_pins_default: i2c5_pins_default {
+		pinctrl-single,pins = <
+			DRA7XX_CORE_IOPAD(0x36b4, (PIN_INPUT_PULLUP | MUX_MODE10))   /* mcasp1_axr1.i2c5_scl */
+			DRA7XX_CORE_IOPAD(0x36b8, (PIN_INPUT_PULLUP | MUX_MODE10))   /* mcasp1_axr0.i2c5_sda */
+		>;
+	};
+};
+
+&dss {
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port {
+			reg = <0>;
+
+			dpi_out: endpoint {
+				remote-endpoint = <&lcd_in>;
+				data-lines = <24>;
+			};
+		};
+	};
+};
+
+&epwmss0 {
+	status = "okay";
+};
+
+&ecap0 {
+	status = "okay";
+};
+
+&qspi {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&qspi1_pins_default>;
+
+	spi-max-frequency = <64000000>;
+
+	m25p80@0 {
+		compatible = "s25fl256s1";
+		spi-max-frequency = <64000000>;
+		reg = <0>;
+		spi-tx-bus-width = <1>;
+		spi-rx-bus-width = <4>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/*
+		 * MTD partition table.
+		 */
+
+		partition@0 {
+			label = "spi.spl";
+			reg = <0x00000000 0x00020000>;	/* 128KB */
+		};
+
+		partition@1 {
+			label = "spi.u-boot";
+			reg = <0x00020000 0x00080000>;	/* 512KB */
+		};
+
+		partition@2 {
+			label = "spi.env";
+			reg = <0x000a0000 0x00040000>; /* 256KB */
+		};
+		partition@3 {
+			label = "spi.devicetree";
+			reg = <0x000e0000 0x00080000>; /* 512KB */
+		};
+		partition@4 {
+			label = "spi.kernel";
+			reg = <0x00160000 0x00800000>; /* 8MB */
+		};
+		partition@5 {
+			label = "spi.user-data";
+			reg = <0x00960000 0x00000000>; /* 21.87MB */
+		};
+	};
+};
+
+&dcan1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&dcan1__pins_default>;
+};
+
+&epwmss1 {
+	status = "okay";
+};
+
+&ehrpwm1 {
+	status = "okay";
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins_default>;
+
+	interrupts-extended = <&crossbar_mpu GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
+			<&dra7_pmx_core 0x3e0>;
+};
+
+&uart8 {
+	status = "okay";
+};
+
+&tpd12s015 {
+	gpios = <&gpio7 10 GPIO_ACTIVE_HIGH>,   /* gpio7_10, CT CP HPD */
+		<&gpio2 30 GPIO_ACTIVE_HIGH>,   /* gpio2_30, LS OE */
+		<&gpio7 12 GPIO_ACTIVE_HIGH>;   /* gpio7_12/sp1_cs2, HPD */
+};
+
+&mmc1 {
+	vmmc-supply = <&vdd_3v3>;
+	vmmc_aux-supply = <&ldo1_reg>;
+};
+
+&mmc3 {
+	status = "okay";
+	vmmc-supply = <&vmmcwl_fixed>;
+	bus-width = <4>;
+	pinctrl-names = "default";
+	cap-power-off-card;
+	keep-power-in-suspend;
+	ti,non-removable;
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+	wlcore: wlcore@2 {
+		compatible = "ti,wl1835";
+		reg = <2>;
+		interrupt-parent = <&gpio5>;
+		interrupts = <7 IRQ_TYPE_LEVEL_HIGH>;
+	};
+};
+
+/* errata i880 "Ethernet RGMII2 Limited to 10/100 Mbps" */
+&phy1 {
+	max-speed = <1000>;
+};
